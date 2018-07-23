@@ -21,6 +21,34 @@ class TomeRater(object):
         k = list(self.books.keys())
         return k[v.indec(max(v))]
 
+    def create_book(self, title, isbn):
+        created_book = Book(title, isbn)
+        return created_book
+
+    def create_novel(self, title, author, isbn):
+        new_fiction = Fiction(title, author, isbn)
+        return new_fiction
+
+    def create_non_ficion(self, title, subject, level, isbn):
+        new_non_fiction = Non_Fiction(title, subject, level, isbn)
+        return new_non_fiction
+
+    def add_book_to_user(self, book, email, rating=None):
+        user = self.users.get(email)
+        if user:
+            user.read_book(book, rating)
+            if book not in self.books:
+                self.books[book] = 1
+            else:
+                self.books[book] += 1
+            book.add_rating(book, rating)
+
+    def add_user(self, name, email, books=None):
+        new_user = User(name, email)
+        if books:
+            for book in books:
+                self.add_book_to_user(book, email)
+
 class User(object):
     def __init__(self, name, email):
         self.name = name
